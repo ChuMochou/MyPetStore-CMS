@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - MyPetStore</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" type="text/css" media="screen"/>
+</head>
+<body>
+
+<header th:replace="~{admin/common/top}"></header>
+<div class="admin-container">
+    <h2 class="section-title">Management Modules</h2>
+
+    <div class="category-grid">
+        <!-- Product Management -->
+        <div class="category-card">
+            <div class="category-card-header">
+                <h3 class="category-name">Product Management</h3>
+            </div>
+            <p class="category-description">
+                Manage product categories, items, and inventory. Add, edit, or remove products from the store.
+            </p>
+            <div class="category-actions">
+                <a th:href="@{/catalog/categories}" class="btn btn-primary">Manage Categories</a>
+            </div>
+        </div>
+
+        <!-- Order Management -->
+        <div class="category-card">
+            <div class="category-card-header">
+                <h3 class="category-name">Order Management</h3>
+            </div>
+            <p class="category-description">
+                View and manage customer orders. Track order status, process shipments, and handle returns.
+            </p>
+            <div class="category-actions">
+                <a th:href="@{/order/orders}" class="btn btn-primary">View All Orders</a>
+            </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="category-card">
+            <div class="category-card-header">
+                <h3 class="category-name">User Management</h3>
+            </div>
+            <p class="category-description">
+                Manage user accounts, view user information, and handle account-related issues.
+            </p>
+            <div class="category-actions">
+                <a th:href="@{/user/users}" class="btn btn-primary">View All Users</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

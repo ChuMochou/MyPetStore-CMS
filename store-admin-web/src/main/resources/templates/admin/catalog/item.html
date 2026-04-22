@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Item Management - MyPetStore Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" type="text/css" media="screen"/>
+</head>
+<body>
+
+<header th:replace="~{admin/common/top}"></header>
+
+<div class="admin-container">
+    <h2 class="section-title">
+        <span th:text="${productName}">Product Name</span> - Item Management
+        <a th:href="@{/catalog/products(categoryId=${categoryId})}" class="btn btn-primary">Back to Products</a>
+    </h2>
+    <!-- Search Form -->
+    <div class="admin-search">
+        <form th:action="@{/catalog/items}" method="get" class="search-form-inline">
+            <input type="hidden" name="productId" th:value="${productId}"/>
+            <input type="text"
+                   name="keyword"
+                   th:value="${keyword}"
+                   placeholder="Search by item ID, status, or attributes..."
+                   class="search-input"/>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a th:href="@{/catalog/items(productId=${productId})}" class="btn btn-success">Clear</a>
+        </form>
+    </div>
+
+    <div class="category-grid">
+        <div th:each="item : ${items}" class="category-card">
+            <div class="category-card-header">
+                <span class="category-id" th:text="${item.itemId}"></span>
+                <span class="category-id" th:text="${item.status}"></span>
+            </div>
+            <h3 class="category-name">
+                <span th:if="${item.attribute1 != null}" th:text="${item.attribute1 + ' '}"></span>
+                <span th:if="${item.attribute2 != null}" th:text="${item.attribute2 + ' '}"></span>
+                <span th:if="${item.attribute3 != null}" th:text="${item.attribute3 + ' '}"></span>
+                <span th:if="${item.attribute4 != null}" th:text="${item.attribute4 + ' '}"></span>
+                <span th:if="${item.attribute5 != null}" th:text="${item.attribute5 + ' '}"></span>
+                <span th:text="${productName}"></span>
+            </h3>
+            <p class="category-description">
+                List Price: $<span th:text="${item.listPrice}"></span>
+                <br>
+                Unit Cost: $<span th:text="${item.unitCost}"></span>
+            </p>
+            <div class="category-actions">
+                <a th:href="@{/catalog/items(productId=${productId}, editItemId=${item.itemId})}" class="btn btn-warning btn-sm">View/Edit</a>
+                <form th:action="@{/catalog/items/delete}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this item?')">
+                    <input type="hidden" name="itemId" th:value="${item.itemId}" />
+                    <input type="hidden" name="productId" th:value="${productId}" />
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Empty state when no items -->
+        <div th:if="${#lists.isEmpty(items)}" class="empty-state">
+            <div class="empty-state-icon">📦</div>
+            <p th:text="${keyword != null and !keyword.isEmpty() ? 'No items found matching your search.' : 'No items found for this product. Add your first item to get started.'}"></p>
+        </div>
+    </div>
+
+    <!-- Add/Edit Item Card - Full Width -->
+    <div id="edit-form" class="category-card" style="border-left-color: #27ae60; margin-top: 2rem;">
+        <div class="category-card-header">
+            <h3 class="category-name" th:text="${editItem != null ? 'Edit Item' : 'Add New Item'}">Add New Item</h3>
+        </div>
+
+        <!-- Edit Item Form -->
+        <form th:action="@{/catalog/items/update}" th:if="${editItem != null}" method="post">
+            <input type="hidden" name="productId" th:value="${productId}" />
+            <input type="hidden" name="itemId" th:value="${editItem.itemId}" />
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editItemId">Item ID</label>
+                    <input type="text" id="editItemId" readonly
+                           th:value="${editItem.itemId}"
+                           required
+                           placeholder="e.g., EST-1" />
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Status</label>
+                    <input type="text" id="editStatus" name="status"
+                           th:value="${editItem.status}"
+                           placeholder="e.g., P (Available)" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editListPrice">List Price ($)</label>
+                    <input type="number" id="editListPrice" name="listPrice" step="0.01" min="0"
+                           th:value="${editItem.listPrice}"
+                           required
+                           placeholder="0.00" />
+                </div>
+                <div class="form-group">
+                    <label for="editUnitCost">Unit Cost ($)</label>
+                    <input type="number" id="editUnitCost" name="unitCost" step="0.01" min="0"
+                           th:value="${editItem.unitCost}"
+                           required
+                           placeholder="0.00" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="editSupplierId">Supplier ID</label>
+                <input type="number" id="editSupplierId" name="supplierId"
+                       th:value="${editItem.supplierId}"
+                       required
+                       placeholder="e.g., 1" />
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editAttribute1">Attribute 1</label>
+                    <input type="text" id="editAttribute1" name="attribute1"
+                           th:value="${editItem.attribute1}"
+                           placeholder="e.g., Large" />
+                </div>
+                <div class="form-group">
+                    <label for="editAttribute2">Attribute 2</label>
+                    <input type="text" id="editAttribute2" name="attribute2"
+                           th:value="${editItem.attribute2}"
+                           placeholder="e.g., Adult" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editAttribute3">Attribute 3</label>
+                    <input type="text" id="editAttribute3" name="attribute3"
+                           th:value="${editItem.attribute3}"
+                           placeholder="Optional" />
+                </div>
+                <div class="form-group">
+                    <label for="editAttribute4">Attribute 4</label>
+                    <input type="text" id="editAttribute4" name="attribute4"
+                           th:value="${editItem.attribute4}"
+                           placeholder="Optional" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="editAttribute5">Attribute 5</label>
+                <input type="text" id="editAttribute5" name="attribute5"
+                       th:value="${editItem.attribute5}"
+                       placeholder="Optional" />
+            </div>
+            <div class="category-actions">
+                <button type="submit" class="btn btn-success">Update Item</button>
+                <a th:href="@{/catalog/items(productId=${productId})}" class="btn btn-warning">Cancel Edit</a>
+            </div>
+        </form>
+
+        <!-- Add New Item Form -->
+        <form th:action="@{/catalog/items/add}" th:if="${editItem == null}" method="post">
+            <input type="hidden" name="productId" th:value="${productId}" />
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="itemId">Item ID</label>
+                    <input type="text" id="itemId" name="itemId" required placeholder="e.g., EST-1" />
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <input type="text" id="status" name="status" placeholder="e.g., P (Available)" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="listPrice">List Price ($)</label>
+                    <input type="number" id="listPrice" name="listPrice" step="0.01" min="0" required placeholder="0.00" />
+                </div>
+                <div class="form-group">
+                    <label for="unitCost">Unit Cost ($)</label>
+                    <input type="number" id="unitCost" name="unitCost" step="0.01" min="0" required placeholder="0.00" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="supplierId">Supplier ID</label>
+                <input type="number" id="supplierId" name="supplierId" required placeholder="e.g., 1" />
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="attribute1">Attribute 1</label>
+                    <input type="text" id="attribute1" name="attribute1" placeholder="e.g., Large" />
+                </div>
+                <div class="form-group">
+                    <label for="attribute2">Attribute 2</label>
+                    <input type="text" id="attribute2" name="attribute2" placeholder="e.g., Adult" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="attribute3">Attribute 3</label>
+                    <input type="text" id="attribute3" name="attribute3" placeholder="Optional" />
+                </div>
+                <div class="form-group">
+                    <label for="attribute4">Attribute 4</label>
+                    <input type="text" id="attribute4" name="attribute4" placeholder="Optional" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="attribute5">Attribute 5</label>
+                <input type="text" id="attribute5" name="attribute5" placeholder="Optional" />
+            </div>
+            <div class="category-actions">
+                <button type="submit" class="btn btn-success">Add Item</button>
+                <button type="reset" class="btn btn-warning">Clear</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    // Auto scroll to edit form when in edit mode
+    /*<![CDATA[*/
+    var editItem = /*[[${editItem}]]*/ null;
+    if (editItem != null) {
+        window.addEventListener('load', function () {
+            var editForm = document.getElementById('edit-form');
+            if (editForm) {
+                editForm.scrollIntoView({block: 'end'});
+            }
+        });
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>

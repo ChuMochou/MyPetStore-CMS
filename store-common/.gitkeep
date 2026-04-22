@@ -1,0 +1,62 @@
+# Store Common Module for Management Demo
+## 商城公共模块 - 包含通用工具类、常量、异常处理和 DTO
+
+### 模块结构
+```
+store-common/
+├── src/
+│   ├── main/
+│   │   └── java/
+│   │       └── org/
+│   │           └── csu/
+│   │               └── store/
+│   │                   └── common/
+│   │                       ├── Constants.java          # 通用常量
+│   │                       ├── Result.java             # 统一返回结果
+│   │                       ├── exception/              # 自定义异常
+│   │                       │   ├── BusinessException.java
+│   │                       │   └── ResourceNotFoundException.java
+│   │                       ├── util/                   # 工具类
+│   │                       │   ├── Md5Util.java        # MD5 加密工具
+│   │                       │   ├── DateUtil.java       # 日期工具
+│   │                       │   └── StringUtil.java     # 字符串工具
+│   │                       ├── dto/                    # 数据传输对象
+│   │                       │   ├── PageQuery.java      # 分页查询参数
+│   │                       │   └── PageResult.java     # 分页结果
+│   │                       └── handler/                # 全局异常处理
+│   │                           └── GlobalExceptionHandler.java
+│   └── test/
+│       └── java/
+│           └── org/
+│               └── csu/
+│                   └── store/
+│                       └── common/
+└── pom.xml
+```
+
+### 主要功能
+
+1. **Constants** - 系统通用常量定义
+   - HTTP 状态码
+   - 默认配置
+   - 业务常量
+
+2. **Result** - 统一 API 返回结果封装
+   - 成功/失败响应
+   - 数据封装
+
+3. **Exception** - 自定义异常体系
+   - BusinessException - 业务异常
+   - ResourceNotFoundException - 资源未找到异常
+
+4. **Utils** - 常用工具类
+   - Md5Util - MD5 加密（加盐）
+   - DateUtil - 日期格式化
+   - StringUtil - 字符串处理
+
+5. **DTO** - 数据传输对象
+   - PageQuery - 分页查询参数
+   - PageResult - 分页结果封装
+
+6. **Handler** - 全局异常处理器
+   - 统一异常捕获和返回

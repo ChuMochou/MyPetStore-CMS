@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Category Management - MyPetStore Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" type="text/css" media="screen"/>
+</head>
+<body>
+
+<header th:replace="~{admin/common/top}"></header>
+
+<div class="admin-container">
+    <h2 class="section-title">
+        Category Management
+        <a th:href="@{/user/main}" class="btn btn-primary">Back to Main</a>
+    </h2>
+    <!-- Search Form -->
+    <div class="admin-search">
+        <form th:action="@{/catalog/categories}" method="get" class="search-form-inline">
+            <input type="text"
+                   name="keyword"
+                   th:value="${keyword}"
+                   placeholder="Search by category ID, name, or description..."
+                   class="search-input"/>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a th:href="@{/catalog/categories}" class="btn btn-success">Clear</a>
+        </form>
+    </div>
+
+    <div class="category-grid">
+        <div th:each="category : ${categories}" class="category-card">
+            <div class="category-card-header">
+                <span class="category-id" th:text="${category.categoryId}"></span>
+            </div>
+            <h3 class="category-name" th:text="${category.name}"></h3>
+            <p class="category-description" th:text="${category.description}"></p>
+            <div class="category-actions">
+                <a th:href="@{/catalog/products(categoryId=${category.categoryId})}" class="btn btn-primary btn-sm">Products</a>
+                <a th:href="@{/catalog/categories(editCategoryId=${category.categoryId})}" class="btn btn-warning btn-sm">View/Edit</a>
+                <form th:action="@{/catalog/categories/delete}" method="post" style="display: inline;"
+                      onsubmit="return confirm('Are you sure you want to delete this category?')">
+                    <input type="hidden" name="categoryId" th:value="${category.categoryId}"/>
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Empty state when no categories -->
+        <div th:if="${#lists.isEmpty(categories)}" class="empty-state">
+            <div class="empty-state-icon">📦</div>
+            <p th:text="${keyword != null and !keyword.isEmpty() ? 'No categories found matching your search.' : 'No categories found. Add your first category to get started.'}"></p>
+        </div>
+    </div>
+
+    <!-- Add/Edit Category Card - Full Width -->
+    <div id="edit-form" class="category-card" style="border-left-color: #27ae60; margin-top: 2rem;">
+        <div class="category-card-header">
+            <h3 class="category-name" th:text="${editCategory != null ? 'Edit Category' : 'Add New Category'}">Add New
+                Category</h3>
+        </div>
+
+        <!-- Edit New Category Form -->
+        <form th:action="@{/catalog/categories/update}" th:if="${editCategory != null}" method="post">
+            <input type="hidden" name="categoryId" th:value="${editCategory.categoryId}"/>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editCategoryId">Category ID</label>
+                    <input type="text" id="editCategoryId" readonly
+                           th:value="${editCategory.categoryId}"
+                           required
+                           placeholder="e.g., DOGS, CATS"/>
+                </div>
+                <div class="form-group">
+                    <label for="editName">Category Name</label>
+                    <input type="text" id="editName" name="name"
+                           th:value="${editCategory.name}"
+                           required
+                           placeholder="e.g., Dogs, Cats"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="editDescription">Description</label>
+                <textarea id="editDescription" name="description" rows="3"
+                          th:text="${editCategory.description}"
+                          placeholder="Enter category description"></textarea>
+            </div>
+            <div class="category-actions">
+                <button type="submit" class="btn btn-success">Update Category</button>
+                <a th:href="@{/catalog/categories}" class="btn btn-warning">Cancel Edit</a>
+            </div>
+        </form>
+
+        <!-- Add New Category Form -->
+        <form th:action="@{/catalog/categories/add}" th:if="${editCategory == null}" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="categoryId">Category ID</label>
+                    <input type="text" id="categoryId" name="categoryId" required placeholder="e.g., DOGS, CATS"/>
+                </div>
+                <div class="form-group">
+                    <label for="name">Category Name</label>
+                    <input type="text" id="name" name="name" required placeholder="e.g., Dogs, Cats"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="3"
+                          placeholder="Enter category description"></textarea>
+            </div>
+            <div class="category-actions">
+                <button type="submit" class="btn btn-success">Add Category</button>
+                <button type="reset" class="btn btn-warning">Clear</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    // Auto scroll to edit form when in edit mode
+    /*<![CDATA[*/
+    var editCategory = /*[[${editCategory}]]*/ null;
+    if (editCategory != null) {
+        window.addEventListener('load', function () {
+            var editForm = document.getElementById('edit-form');
+            if (editForm) {
+                editForm.scrollIntoView({block: 'end'});
+            }
+        });
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>

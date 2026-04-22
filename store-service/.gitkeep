@@ -1,0 +1,130 @@
+# Store Service Module for Management Demo
+## 商城业务逻辑层模块 - 包含所有 Service 接口和实现类
+
+### 模块结构
+```
+store-service/
+├── src/
+│   ├── main/
+│   │   └── java/
+│   │       └── org/
+│   │           └── csu/
+│   │               └── store/
+│   │                   └── service/
+│   │                       ├── UserService.java          # 用户服务接口
+│   │                       ├── UserServiceImpl.java      # 用户服务实现
+│   │                       ├── ProductService.java       # 商品服务接口
+│   │                       ├── ProductServiceImpl.java   # 商品服务实现
+│   │                       ├── OrderService.java         # 订单服务接口
+│   │                       ├── OrderServiceImpl.java     # 订单服务实现
+│   │                       ├── CategoryService.java      # 分类服务接口
+│   │                       ├── CategoryServiceImpl.java  # 分类服务实现
+│   │                       ├── CartService.java          # 购物车服务接口
+│   │                       └── CartServiceImpl.java      # 购物车服务实现
+│   └── test/
+│       └── java/
+│           └── org/
+│               └── csu/
+│                   └── store/
+│                       └── service/
+│                           └── ServiceTest.java
+└── pom.xml
+```
+
+### Service 接口说明
+
+#### 1. **UserService** - 用户服务
+- `getById(Long id)` - 根据 ID 查询用户
+- `getByUsername(String username)` - 根据用户名查询用户
+- `list()` - 查询所有用户
+- `page(PageQuery pageQuery)` - 分页查询用户
+- `save(User user)` - 保存用户（自动加密密码）
+- `update(User user)` - 更新用户
+- `delete(Long id)` - 删除用户
+- `login(String username, String password)` - 用户登录
+- `checkUsernameExists(String username)` - 检查用户名是否存在
+
+#### 2. **ProductService** - 商品服务
+- `getById(Long id)` - 根据 ID 查询商品
+- `list()` - 查询所有商品
+- `page(PageQuery pageQuery)` - 分页查询商品
+- `listByCategory(Long categoryId)` - 根据分类查询商品
+- `save(Product product)` - 保存商品
+- `update(Product product)` - 更新商品
+- `delete(Long id)` - 删除商品
+- `onSale(Long id)` - 上架商品
+- `offSale(Long id)` - 下架商品
+- `listRecommend()` - 查询推荐商品
+- `listNew()` - 查询新品
+
+#### 3. **OrderService** - 订单服务
+- `getById(Long id)` - 根据 ID 查询订单
+- `getByOrderNo(String orderNo)` - 根据订单编号查询订单
+- `page(PageQuery pageQuery)` - 分页查询订单
+- `listByUserId(Long userId)` - 根据用户 ID 查询订单
+- `create(Order order)` - 创建订单
+- `updateStatus(Long id, Integer status)` - 更新订单状态
+- `cancel(Long id)` - 取消订单
+- `delivery(Long id, String trackingNo, String logisticsCompany)` - 发货
+- `confirmReceive(Long id)` - 确认收货
+
+#### 4. **CategoryService** - 商品分类服务
+- `getById(Long id)` - 根据 ID 查询分类
+- `list()` - 查询所有分类
+- `listLevel1()` - 查询一级分类
+- `listByParentId(Long parentId)` - 根据父 ID 查询子分类
+- `save(Category category)` - 保存分类
+- `update(Category category)` - 更新分类
+- `delete(Long id)` - 删除分类
+
+#### 5. **CartService** - 购物车服务
+- `getById(Long id)` - 根据 ID 查询购物车项
+- `listByUserId(Long userId)` - 查询用户购物车
+- `addToCart(Cart cart)` - 添加到购物车
+- `updateQuantity(Long id, Integer quantity)` - 更新数量
+- `delete(Long id)` - 删除购物车项
+- `clear(Long userId)` - 清空购物车
+- `check(Long id, Integer checked)` - 选中/取消选中
+
+### 技术特点
+
+- ✅ 使用 @Service 注解标记服务类
+- ✅ 基于 Spring 的依赖注入（@Autowired）
+- ✅ 使用 MyBatis Plus 的 LambdaQueryWrapper 进行类型安全查询
+- ✅ 统一的分页支持（PageResult）
+- ✅ 完善的异常处理（BusinessException）
+- ✅ 业务逻辑封装（如密码加密、价格计算等）
+
+### 使用示例
+
+```java
+@Autowired
+private UserService userService;
+
+@Autowired
+private ProductService productService;
+
+// 用户登录
+User user = userService.login("admin", "123456");
+
+// 分页查询商品
+PageQuery pageQuery = new PageQuery(1, 10);
+PageResult<Product> productPage = productService.page(pageQuery);
+
+// 查询推荐商品
+List<Product> recommendProducts = productService.listRecommend();
+
+// 添加商品到购物车
+Cart cart = new Cart();
+cart.setUserId(1L);
+cart.setProductId(100L);
+cart.setQuantity(2);
+cartService.addToCart(cart);
+
+// 创建订单
+Order order = new Order();
+order.setOrderNo(generateOrderNo());
+order.setUserId(1L);
+order.setTotalAmount(new BigDecimal("199.00"));
+orderService.create(order);
+```

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management - MyPetStore Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" type="text/css" media="screen"/>
+</head>
+<body>
+
+<header th:replace="~{admin/common/top}"></header>
+
+<div class="admin-container">
+    <h2 class="section-title">
+        User Management
+        <a th:href="@{/user/main}" class="btn btn-primary">Back to Main</a>
+    </h2>
+    <!-- Search Form -->
+    <div class="admin-search">
+        <form th:action="@{/user/users}" method="get" class="search-form-inline">
+            <input type="text"
+                   name="keyword"
+                   th:value="${keyword}"
+                   placeholder="Search by username, name, or email..."
+                   class="search-input"/>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a th:href="@{/user/users}" class="btn btn-success">Clear</a>
+        </form>
+    </div>
+
+    <div class="category-grid">
+        <div th:each="account : ${accounts}" class="category-card">
+            <div class="category-card-header">
+                <span class="category-id" th:text="${account.username}"></span>
+                <span class="order-status"
+                      th:classappend="${account.status == 'OK' ? 'status-approved' : 'status-pending'}"
+                      th:text="${account.status != null ? account.status : 'Unknown'}">
+                </span>
+            </div>
+
+            <h3 class="category-name"
+                th:text="${(account.firstName != null ? account.firstName : '') + ' ' + (account.lastName != null ? account.lastName : '')}"></h3>
+
+            <div class="order-info">
+                <span class="order-info-label">Email:</span>
+                <span th:text="${account.email != null ? account.email : 'N/A'}"></span>
+            </div>
+
+            <div class="order-info">
+                <span class="order-info-label">Phone:</span>
+                <span th:text="${account.phone != null ? account.phone : 'N/A'}"></span>
+            </div>
+
+            <div class="order-info">
+                <span class="order-info-label">Address:</span>
+                <span th:text="${(account.address1 != null && !account.address1.isEmpty() ? account.address1 : 'N/A') +
+                                 (account.address2 != null && !account.address2.isEmpty() ? ', ' + account.address2 : '')}"></span>
+            </div>
+
+            <div class="order-info">
+                <span class="order-info-label">Location:</span>
+                <span th:text="${(account.city != null ? account.city : '') +
+                                 (account.state != null && !account.state.isEmpty() ? ', ' + account.state : '') +
+                                 (account.zip != null && !account.zip.isEmpty() ? ' ' + account.zip : '')}"></span>
+            </div>
+
+            <div class="order-info">
+                <span class="order-info-label">Country:</span>
+                <span th:text="${account.country != null ? account.country : 'N/A'}"></span>
+            </div>
+
+            <div class="order-info">
+                <span class="order-info-label">Language:</span>
+                <span th:text="${account.languagePrefer != null ? account.languagePrefer : 'N/A'}"></span>
+            </div>
+
+            <div class="order-info">
+                <span class="order-info-label">Favorite Category:</span>
+                <span th:text="${account.favoriteCategory != null ? account.favoriteCategory : 'N/A'}"></span>
+            </div>
+
+            <div class="category-actions">
+                <a th:href="@{/user/userDetails(username=${account.username})}" class="btn btn-success btn-sm">View User</a>
+                <a th:href="@{/order/orders(userId=${account.username})}" class="btn btn-primary btn-sm">View Orders</a>
+            </div>
+        </div>
+
+        <!-- Empty state when no users -->
+        <div th:if="${#lists.isEmpty(accounts)}" class="empty-state">
+            <div class="empty-state-icon">👥</div>
+            <p th:text="${keyword != null and !keyword.isEmpty() ? 'No users found matching your search.' : 'No users found.'}"></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

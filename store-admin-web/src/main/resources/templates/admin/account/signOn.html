@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员登录 - MyPetStore</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-logo">🐾</div>
+                <h1 class="login-title">MyPetStore</h1>
+                <p class="login-subtitle">后台管理系统</p>
+            </div>
+
+            <form class="login-form" id="loginForm" th:action="@{/account/signOn}" method="post">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required 
+                           placeholder="请输入用户名" autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" required 
+                           placeholder="请输入密码" autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn-login">登 录</button>
+
+                <div th:if="${signOnMsg}" class="login-error" th:text="${signOnMsg}"></div>
+
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <a th:href="@{/account/newAccountForm}" style="color: #667eea; text-decoration: none; font-size: 0.95rem;">
+                        没有账户？立即注册 →
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Details - MyPetStore Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" type="text/css" media="screen"/>
+</head>
+<body>
+
+<header th:replace="~{admin/common/top}"></header>
+
+<div class="admin-container">
+    <div class="order-details-container">
+        <!-- Header -->
+        <div class="order-details-header">
+            <h2 class="order-details-title" th:text="'Order #' + ${order.orderId}"></h2>
+            <a th:href="@{/order/orders(userId=${filterUserId})}" class="btn btn-primary">
+                <span th:text="${filterUserId != null ? 'Back to User Orders' : 'Back to Orders'}"></span>
+            </a>
+        </div>
+
+        <!-- Order Basic Information -->
+        <div class="details-section">
+            <h3 class="details-section-title">Order Information</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Order ID</div>
+                    <div class="detail-value" th:text="${order.orderId}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">User ID</div>
+                    <div class="detail-value" th:text="${order.userId}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Order Date</div>
+                    <div class="detail-value" th:text="${order.createTime}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value">
+                        <span class="order-status"
+                              th:classappend="${order.orderStatus != null ? (order.orderStatus == 0 ? 'status-pending' : (order.orderStatus == 1 ? 'status-approved' : (order.orderStatus == 2 ? 'status-shipped' : 'status-delivered'))) : 'status-pending'}"
+                              th:text="${order.orderStatus != null ? (order.orderStatus == 0 ? 'Pending' : (order.orderStatus == 1 ? 'Approved' : (order.orderStatus == 2 ? 'Shipped' : 'Delivered'))) : 'Pending'}">
+                        </span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Total Amount</div>
+                    <div class="detail-value" style="color: #27ae60;" th:text="'$' + ${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Courier</div>
+                    <div class="detail-value" th:text="${order.courier != null ? order.courier : 'N/A'}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Billing Information -->
+        <div class="details-section">
+            <h3 class="details-section-title">Billing Information</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Bill To</div>
+                    <div class="detail-value" th:text="${(order.billToFirstName != null ? order.billToFirstName : '') + ' ' + (order.billToLastName != null ? order.billToLastName : '')}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Address 1</div>
+                    <div class="detail-value" th:text="${order.billAddress1 != null ? order.billAddress1 : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Address 2</div>
+                    <div class="detail-value" th:text="${order.billAddress2 != null ? order.billAddress2 : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">City</div>
+                    <div class="detail-value" th:text="${order.billCity != null ? order.billCity : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">State</div>
+                    <div class="detail-value" th:text="${order.billState != null ? order.billState : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Zip Code</div>
+                    <div class="detail-value" th:text="${order.billZip != null ? order.billZip : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Country</div>
+                    <div class="detail-value" th:text="${order.billCountry != null ? order.billCountry : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Credit Card</div>
+                    <div class="detail-value" th:text="${order.creditCard != null ? order.creditCard : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Card Type</div>
+                    <div class="detail-value" th:text="${order.cardType != null ? order.cardType : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Expiry Date</div>
+                    <div class="detail-value" th:text="${order.expiryDate != null ? order.expiryDate : 'N/A'}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping Information -->
+        <div class="details-section">
+            <h3 class="details-section-title">Shipping Information</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Ship To</div>
+                    <div class="detail-value" th:text="${(order.shipToFirstName != null ? order.shipToFirstName : '') + ' ' + (order.shipToLastName != null ? order.shipToLastName : '')}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Address 1</div>
+                    <div class="detail-value" th:text="${order.shipAddress1 != null ? order.shipAddress1 : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Address 2</div>
+                    <div class="detail-value" th:text="${order.shipAddress2 != null ? order.shipAddress2 : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">City</div>
+                    <div class="detail-value" th:text="${order.shipCity != null ? order.shipCity : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">State</div>
+                    <div class="detail-value" th:text="${order.shipState != null ? order.shipState : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Zip Code</div>
+                    <div class="detail-value" th:text="${order.shipZip != null ? order.shipZip : 'N/A'}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Country</div>
+                    <div class="detail-value" th:text="${order.shipCountry != null ? order.shipCountry : 'N/A'}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status History -->
+        <div class="details-section" th:if="${orderStatus != null}">
+            <h3 class="details-section-title">Order Status History</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Current Status</div>
+                    <div class="detail-value">
+                        <span class="order-status"
+                              th:classappend="${orderStatus.status == 0 ? 'status-pending' : (orderStatus.status == 1 ? 'status-approved' : (orderStatus.status == 2 ? 'status-shipped' : 'status-delivered'))}"
+                              th:text="${orderStatus.status == 0 ? 'Pending' : (orderStatus.status == 1 ? 'Approved' : (orderStatus.status == 2 ? 'Shipped' : 'Delivered'))}">
+                        </span>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Status Update Time</div>
+                    <div class="detail-value" th:text="${orderStatus.timestamp}"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Line Number</div>
+                    <div class="detail-value" th:text="${orderStatus.lineNumber}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Line Items -->
+        <div class="details-section" th:if="${lineItems != null and !#lists.isEmpty(lineItems)}">
+            <h3 class="details-section-title">Order Items</h3>
+            <table class="line-items-table">
+                <thead>
+                <tr>
+                    <th>Line #</th>
+                    <th>Item ID</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${lineItems}">
+                    <td th:text="${item.lineNumber}"></td>
+                    <td th:text="${item.itemId}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td th:text="'$' + ${#numbers.formatDecimal(item.unitPrice, 1, 2)}"></td>
+                    <td th:text="'$' + ${#numbers.formatDecimal(item.unitPrice * item.quantity, 1, 2)}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="table-total">
+                Order Total: $<span th:text="${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></span>
+            </div>
+        </div>
+
+        <!-- Empty state for line items -->
+        <div class="details-section" th:if="${lineItems == null or #lists.isEmpty(lineItems)}">
+            <h3 class="details-section-title">Order Items</h3>
+            <div class="empty-state">
+                <div class="empty-state-icon">📦</div>
+                <p>No items found in this order.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

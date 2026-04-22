@@ -1,0 +1,16 @@
+<header th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="admin-header">
+        <h1>MyPetStore Admin Dashboard🐾</h1>
+        <p>Welcome to the administration panel</p>
+    </div>
+
+    <nav class="admin-nav">
+        <a th:href="@{/user/main}">Dashboard</a>
+        <a th:href="@{/catalog/categories}">Categories</a>
+        <a th:href="@{/order/orders}">Orders</a>
+        <a th:href="@{/user/users}">Users</a>
+        <a th:if="${session.loginAccount != null}" href="javascript:void(0)" style="cursor: default;" th:text="${session.loginAccount.username}"></a>
+        <a th:if="${session.loginAccount == null}" th:href="@{/account/signOnForm}">Login</a>
+        <a th:href="@{/account/signOff}">Logout</a>
+    </nav>
+</header>

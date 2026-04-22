@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Management - MyPetStore Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" type="text/css" media="screen"/>
+</head>
+<body>
+
+<header th:replace="~{admin/common/top}"></header>
+
+<div class="admin-container">
+    <h2 class="section-title">
+        <span th:text="${filterUserId != null ? 'Orders for User: ' + filterUserId : (keyword != null ? 'Search Results' : 'Order Management')}"></span>
+        <a th:href="${filterUserId != null ? '/user/users' : '/user/main'}" class="btn btn-primary">
+            <span th:text="${filterUserId != null ? 'Back to Users' : 'Back to Main'}"></span>
+        </a>
+    </h2>
+    <!-- Search Form -->
+    <div class="admin-search">
+        <form th:action="@{/order/orders}" method="get" class="search-form-inline">
+            <input type="text"
+                   name="keyword"
+                   th:value="${keyword}"
+                   placeholder="Search by order ID, user ID, or customer name..."
+                   class="search-input"/>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a th:href="@{/order/orders}" class="btn btn-success">Clear</a>
+        </form>
+    </div>
+
+    <div class="order-grid">
+        <div th:each="order : ${orders}" class="order-card">
+            <div class="order-card-header">
+                <span class="order-id" th:text="'#' + ${order.orderId}"></span>
+                <span class="order-status"
+                      th:classappend="${order.orderStatus != null ? (order.orderStatus == 0 ? 'status-pending' : (order.orderStatus == 1 ? 'status-approved' : (order.orderStatus == 2 ? 'status-shipped' : 'status-delivered'))) : 'status-pending'}"
+                      th:text="${order.orderStatus != null ? (order.orderStatus == 0 ? 'Pending' : (order.orderStatus == 1 ? 'Approved' : (order.orderStatus == 2 ? 'Shipped' : 'Delivered'))) : 'Pending'}">
+                </span>
+            </div>
+
+            <h3 class="order-customer" th:text="${(order.billToFirstName != null ? order.billToFirstName : '') + ' ' + (order.billToLastName != null ? order.billToLastName : '')}"></h3>
+
+            <div class="order-info">
+                <span class="order-info-label">User ID:</span>
+                <span th:text="${order.userId}"></span>
+            </div>
+
+            <div class="order-info">
+                <span class="order-info-label">Order Date:</span>
+                <span th:text="${order.createTime}"></span>
+            </div>
+
+            <div class="order-info">
+                <span class="order-info-label">Ship To:</span>
+                <span th:text="${(order.shipToFirstName != null ? order.shipToFirstName : '') + ' ' + (order.shipToLastName != null ? order.shipToLastName : '')}"></span>
+            </div>
+
+            <div class="order-info">
+                <span class="order-info-label">Address:</span>
+                <span th:text="${(order.shipAddress1 != null ? order.shipAddress1 : '') + ', ' + (order.shipCity != null ? order.shipCity : '') + ', ' + (order.shipState != null ? order.shipState : '') + ' ' + (order.shipZip != null ? order.shipZip : '')}"></span>
+            </div>
+
+            <div class="order-total">
+                Total: $<span th:text="${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></span>
+            </div>
+
+            <div class="order-actions">
+                <a th:href="@{/order/orders/details(orderId=${order.orderId}, userId=${filterUserId})}" class="btn btn-primary btn-sm">View Details</a>
+                <!-- Ship button - only show if order status is not shipped or delivered -->
+                <form th:if="${order.orderStatus == null || (order.orderStatus != 2 && order.orderStatus != 3)}"
+                      th:action="@{/order/orders/ship}" method="post" style="display: inline;"
+                      onsubmit="return confirm('Are you sure you want to ship this order?')">
+                    <input type="hidden" name="orderId" th:value="${order.orderId}"/>
+                    <button type="submit" class="btn btn-shipping btn-sm">Ship Order</button>
+                </form>
+                <form th:action="@{/order/orders/delete}" method="post" style="display: inline;"
+                      onsubmit="return confirm('Are you sure you want to delete this order?')">
+                    <input type="hidden" name="orderId" th:value="${order.orderId}"/>
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Empty state when no orders -->
+        <div th:if="${#lists.isEmpty(orders)}" class="empty-state">
+            <div class="empty-state-icon">📦</div>
+            <p th:text="${keyword != null and !keyword.isEmpty() ? 'No orders found matching your search.' : 'No orders found.'}"></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

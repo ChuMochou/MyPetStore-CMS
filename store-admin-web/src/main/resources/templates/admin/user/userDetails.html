@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Details - MyPetStore Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" type="text/css" media="screen"/>
+</head>
+<body>
+
+<header th:replace="~{admin/common/top}"></header>
+
+<div class="admin-container">
+    <h2 class="section-title">
+        User Details
+        <a th:href="@{/user/users}" class="btn btn-primary">Back to Users</a>
+    </h2>
+
+    <div class="user-details-container">
+        <!-- Basic Information Section -->
+        <div class="details-section">
+            <h3 class="details-section-title">Basic Information</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Username</div>
+                    <div class="detail-value" th:text="${account.username != null ? account.username : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value">
+                        <span class="order-status"
+                              th:classappend="${account.status == 'OK' ? 'status-approved' : 'status-pending'}"
+                              th:text="${account.status != null ? account.status : 'Unknown'}">
+                        </span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">First Name</div>
+                    <div class="detail-value" th:text="${account.firstName != null && !account.firstName.isEmpty() ? account.firstName : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Last Name</div>
+                    <div class="detail-value" th:text="${account.lastName != null && !account.lastName.isEmpty() ? account.lastName : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value" th:text="${account.email != null && !account.email.isEmpty() ? account.email : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Phone</div>
+                    <div class="detail-value" th:text="${account.phone != null && !account.phone.isEmpty() ? account.phone : 'N/A'}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Section -->
+        <div class="details-section">
+            <h3 class="details-section-title">Address Information</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Address Line 1</div>
+                    <div class="detail-value" th:text="${account.address1 != null && !account.address1.isEmpty() ? account.address1 : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Address Line 2</div>
+                    <div class="detail-value" th:text="${account.address2 != null && !account.address2.isEmpty() ? account.address2 : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">City</div>
+                    <div class="detail-value" th:text="${account.city != null && !account.city.isEmpty() ? account.city : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">State/Province</div>
+                    <div class="detail-value" th:text="${account.state != null && !account.state.isEmpty() ? account.state : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">ZIP/Postal Code</div>
+                    <div class="detail-value" th:text="${account.zip != null && !account.zip.isEmpty() ? account.zip : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Country</div>
+                    <div class="detail-value" th:text="${account.country != null && !account.country.isEmpty() ? account.country : 'N/A'}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences Section -->
+        <div class="details-section">
+            <h3 class="details-section-title">Preferences</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Language Preference</div>
+                    <div class="detail-value" th:text="${account.languagePrefer != null && !account.languagePrefer.isEmpty() ? account.languagePrefer : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Favorite Category</div>
+                    <div class="detail-value" th:text="${account.favoriteCategory != null && !account.favoriteCategory.isEmpty() ? account.favoriteCategory : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">My List Option</div>
+                    <div class="detail-value" th:text="${account.myListOption == 1 ? 'Enabled' : 'Disabled'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Banner Option</div>
+                    <div class="detail-value" th:text="${account.bannerOption == 1 ? 'Enabled' : 'Disabled'}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Metadata Section -->
+        <div class="details-section">
+            <h3 class="details-section-title">Account Metadata</h3>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Account ID</div>
+                    <div class="detail-value" th:text="${account.id != null ? account.id : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Created At</div>
+                    <div class="detail-value" th:text="${account.createTime != null ? account.createTime : 'N/A'}"></div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Last Updated</div>
+                    <div class="detail-value" th:text="${account.updateTime != null ? account.updateTime : 'N/A'}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="user-actions">
+            <a th:href="@{/order/orders(userId=${account.username})}" class="btn btn-primary">View User Orders</a>
+            <form th:action="@{/user/users/resetPassword}" method="post" style="display: inline;"
+                  onsubmit="return confirm('Are you sure you want to reset this user\'s password to 123456?')">
+                <input type="hidden" name="username" th:value="${account.username}"/>
+                <button type="submit" class="btn btn-warning">Reset Password</button>
+            </form>
+            <a th:href="@{/user/users}" class="btn btn-success">Back to User List</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

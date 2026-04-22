@@ -1,0 +1,89 @@
+# Store Model Module for Management Demo
+## 商城模型模块 - 包含所有实体类（Entity）
+
+### 模块结构
+```
+store-model/
+├── src/
+│   ├── main/
+│   │   └── java/
+│   │       └── org/
+│   │           └── csu/
+│   │               └── store/
+│   │                   └── model/
+│   │                       └── entity/
+│   │                           ├── BaseEntity.java          # 基础实体类
+│   │                           ├── User.java                # 用户实体
+│   │                           ├── Category.java            # 商品分类实体
+│   │                           ├── Product.java             # 商品实体
+│   │                           ├── Order.java               # 订单实体
+│   │                           ├── OrderItem.java           # 订单商品关联实体
+│   │                           ├── Cart.java                # 购物车实体
+│   │                           ├── Address.java             # 收货地址实体
+│   │                           ├── Brand.java               # 品牌实体
+│   │                           ├── Comment.java             # 商品评价实体
+│   │                           └── Banner.java              # 广告/Banner 实体
+│   └── test/
+│       └── java/
+│           └── org/
+│               └── csu/
+│                   └── store/
+│                       └── model/
+│                           └── EntityTest.java
+└── pom.xml
+```
+
+### 实体类说明
+
+1. **BaseEntity** - 基础实体类
+   - 包含公共字段：id, createTime, updateTime, delFlag
+   - 使用 MyBatis Plus 注解
+
+2. **User** - 用户实体
+   - 用户名、密码、昵称、邮箱、手机等
+   - 角色、状态、登录信息
+
+3. **Category** - 商品分类实体
+   - 支持多级分类（父子关系）
+   - 层级、排序、图标等
+
+4. **Product** - 商品实体
+   - 商品信息、价格、库存、销量
+   - 图片、详情、品牌等
+   - 推荐、新品标记
+
+5. **Order** - 订单实体
+   - 订单编号、金额、状态
+   - 支付、发货、收货信息
+   - 物流、退款信息
+
+6. **OrderItem** - 订单商品关联实体
+   - 订单与商品的关联
+   - 商品快照信息
+
+7. **Cart** - 购物车实体
+   - 用户购物车项
+   - 商品数量、选中状态
+
+8. **Address** - 收货地址实体
+   - 用户收货地址
+   - 省市区、详细地址
+
+9. **Brand** - 品牌实体
+   - 品牌信息、Logo、官网
+
+10. **Comment** - 商品评价实体
+    - 评分、评价内容、图片
+    - 商家回复、审核状态
+
+11. **Banner** - 广告/Banner 实体
+    - 轮播图、广告位
+    - 跳转链接、排序
+
+### 技术特点
+
+- ✅ 使用 MyBatis Plus 进行 ORM 映射
+- ✅ 支持逻辑删除（@TableLogic）
+- ✅ 自动填充创建/更新时间
+- ✅ Lombok 简化代码（@Data, @EqualsAndHashCode）
+- ✅ 实现 Serializable 接口支持序列化

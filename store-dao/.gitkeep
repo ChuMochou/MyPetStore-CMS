@@ -1,0 +1,117 @@
+# Store DAO Module for Management Demo
+## 商城数据访问层模块 - 包含所有 Mapper 接口和 MyBatis 配置
+
+### 模块结构
+```
+store-dao/
+├── src/
+│   ├── main/
+│   │   └── java/
+│   │       └── org/
+│   │           └── csu/
+│   │               └── store/
+│   │                   └── dao/
+│   │                       ├── UserMapper.java          # 用户 Mapper
+│   │                       ├── CategoryMapper.java      # 商品分类 Mapper
+│   │                       ├── ProductMapper.java       # 商品 Mapper
+│   │                       ├── OrderMapper.java         # 订单 Mapper
+│   │                       ├── OrderItemMapper.java     # 订单商品关联 Mapper
+│   │                       ├── CartMapper.java          # 购物车 Mapper
+│   │                       ├── AddressMapper.java       # 收货地址 Mapper
+│   │                       ├── BrandMapper.java         # 品牌 Mapper
+│   │                       ├── CommentMapper.java       # 商品评价 Mapper
+│   │                       ├── BannerMapper.java        # 广告/Banner Mapper
+│   │                       └── config/
+│   │                           └── MybatisPlusConfig.java  # MyBatis Plus 配置
+│   └── test/
+│       └── java/
+│           └── org/
+│               └── csu/
+│                   └── store/
+│                       └── dao/
+│                           └── MapperTest.java
+└── pom.xml
+```
+
+### Mapper 接口说明
+
+所有 Mapper 接口都继承自 **MyBatis Plus** 的 `BaseMapper<T>`，自动获得以下 CRUD 方法：
+
+#### 基础 CRUD 方法：
+- `insert(T entity)` - 插入记录
+- `deleteById(Serializable id)` - 根据 ID 删除
+- `deleteByMap(Map<String, Object> map)` - 根据条件删除
+- `updateById(T entity)` - 根据 ID 更新
+- `selectById(Serializable id)` - 根据 ID 查询
+- `selectBatchIds(Collection<? extends Serializable> idList)` - 批量查询
+- `selectByMap(Map<String, Object> map)` - 根据条件查询
+- `selectList(Wrapper<T> queryWrapper)` - 条件查询列表
+- `selectPage(Page<T> page, Wrapper<T> queryWrapper)` - 分页查询
+
+#### 已创建的 Mapper 接口：
+
+1. **UserMapper** - 用户数据访问
+2. **CategoryMapper** - 商品分类数据访问
+3. **ProductMapper** - 商品数据访问
+4. **OrderMapper** - 订单数据访问
+5. **OrderItemMapper** - 订单商品关联数据访问
+6. **CartMapper** - 购物车数据访问
+7. **AddressMapper** - 收货地址数据访问
+8. **BrandMapper** - 品牌数据访问
+9. **CommentMapper** - 商品评价数据访问
+10. **BannerMapper** - 广告/Banner 数据访问
+
+### 配置说明
+
+#### MybatisPlusConfig 配置类：
+
+1. **分页插件**
+   - 配置 MySQL 数据库的分页查询
+   - 使用 `PaginationInnerInterceptor` 实现物理分页
+
+2. **自动填充处理器**
+   - 插入时自动填充 `createTime`、`updateTime`、`delFlag`
+   - 更新时自动填充 `updateTime`
+   - 需要在实体类字段上使用 `@TableField(fill = FieldFill.INSERT)` 或 `@TableField(fill = FieldFill.INSERT_UPDATE)` 注解
+
+### 技术特点
+
+- ✅ 使用 MyBatis Plus 简化开发
+- ✅ 继承 BaseMapper 获得完整 CRUD 能力
+- ✅ 支持 Lambda 表达式查询（LambdaQueryWrapper）
+- ✅ 自动分页功能
+- ✅ 自动填充创建/更新时间
+- ✅ 支持逻辑删除
+- ✅ 使用 @Mapper 注解标记接口
+
+### 使用示例
+
+```java
+@Autowired
+private UserMapper userMapper;
+
+// 查询所有用户
+List<User> users = userMapper.selectList(null);
+
+// 根据 ID 查询
+User user = userMapper.selectById(1L);
+
+// 条件查询
+LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+wrapper.eq(User::getStatus, 1)
+       .like(User::getUsername, "admin");
+List<User> list = userMapper.selectList(wrapper);
+
+// 分页查询
+Page<User> page = new Page<>(1, 10);
+userMapper.selectPage(page, null);
+
+// 插入
+userMapper.insert(user);
+
+// 更新
+userMapper.updateById(user);
+
+// 删除
+userMapper.deleteById(1L);
+```
