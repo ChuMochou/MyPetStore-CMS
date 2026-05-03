@@ -26,6 +26,7 @@ public class CatalogController {
     private CatalogService catalogService;
     @Autowired
     private HttpSession session;
+
     @GetMapping("/")
     public String index() {
         session.setAttribute("categories", catalogService.getAllCategories());
@@ -35,7 +36,7 @@ public class CatalogController {
     @GetMapping("/categories")
     public String manageCategories(@RequestParam(required = false) String keyword,
                                    @RequestParam(required = false) String editCategoryId, Model model) {
-        if(session.getAttribute("loginAccount")==null) {
+        if (session.getAttribute("loginAccount") == null) {
             return "redirect:/account/signOnForm";
         }
         List<Category> categories;
@@ -92,7 +93,7 @@ public class CatalogController {
                                  @RequestParam(required = false) String keyword,
                                  @RequestParam(required = false) String editProductId,
                                  Model model) {
-        if(session.getAttribute("loginAccount")==null) {
+        if (session.getAttribute("loginAccount") == null) {
             return "redirect:/account/signOnForm";
         }
         List<Product> products;
@@ -159,7 +160,7 @@ public class CatalogController {
                               @RequestParam(required = false) String keyword,
                               @RequestParam(required = false) String editItemId,
                               Model model) {
-        if(session.getAttribute("loginAccount")==null) {
+        if (session.getAttribute("loginAccount") == null) {
             return "redirect:/account/signOnForm";
         }
         List<Item> items;
