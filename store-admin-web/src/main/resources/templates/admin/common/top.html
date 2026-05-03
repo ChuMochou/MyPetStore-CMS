@@ -11,6 +11,6 @@
         <a th:href="@{/user/users}">Users</a>
         <a th:if="${session.loginAccount != null}" href="javascript:void(0)" style="cursor: default;" th:text="${session.loginAccount.username}"></a>
         <a th:if="${session.loginAccount == null}" th:href="@{/account/signOnForm}">Login</a>
-        <a th:href="@{/account/signOff}">Logout</a>
+        <a th:if="${session.loginAccount!=null}" th:href="@{/account/signOff}">Logout</a>
     </nav>
 </header>

@@ -26,8 +26,7 @@ public class CatalogController {
     private CatalogService catalogService;
     @Autowired
     private HttpSession session;
-
-    @GetMapping("index")
+    @GetMapping("/")
     public String index() {
         session.setAttribute("categories", catalogService.getAllCategories());
         return "admin/main";
