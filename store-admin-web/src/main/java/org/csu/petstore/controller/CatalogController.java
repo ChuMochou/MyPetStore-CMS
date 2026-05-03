@@ -27,12 +27,6 @@ public class CatalogController {
     @Autowired
     private HttpSession session;
 
-    @GetMapping("/")
-    public String index() {
-        session.setAttribute("categories", catalogService.getAllCategories());
-        return "admin/main";
-    }
-
     @GetMapping("/categories")
     public String manageCategories(@RequestParam(required = false) String keyword,
                                    @RequestParam(required = false) String editCategoryId, Model model) {
