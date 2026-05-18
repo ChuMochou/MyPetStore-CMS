@@ -126,4 +126,17 @@ public class AccountServiceImpl implements AccountService {
             accountMapper.update(account, queryWrapper);
         }
     }
+
+    @Override
+    public void updateAccount(Account account) {
+        QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid", account.getUsername());
+        Account existingAccount = accountMapper.selectOne(queryWrapper);
+        if (existingAccount != null) {
+            // Keep the original id and password
+            account.setId(existingAccount.getId());
+            account.setPassword(existingAccount.getPassword());
+            accountMapper.update(account, queryWrapper);
+        }
+    }
 }

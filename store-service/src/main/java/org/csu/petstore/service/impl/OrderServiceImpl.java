@@ -160,4 +160,39 @@ public class OrderServiceImpl implements OrderService {
         queryWrapper.orderByDesc("orderid");
         return ordersMapper.selectList(queryWrapper);
     }
+
+    @Override
+    public void updateOrder(Orders order, int newStatus) {
+        // 更新订单基本信息
+        QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("orderid", order.getOrderId());
+        Orders existingOrder = ordersMapper.selectOne(queryWrapper);
+        
+        if (existingOrder != null) {
+            // Keep the original id and other system fields
+            order.setId(existingOrder.getId());
+            order.setDeleted(existingOrder.getDeleted());
+            order.setCreateTime(existingOrder.getCreateTime());
+            order.setUpdateTime(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
+            
+            // Update the order
+            ordersMapper.update(order, queryWrapper);
+            
+            // 更新订单状态
+            OrderStatus orderStatus = getOrderStatus(order.getOrderId());
+            if (orderStatus != null) {
+                orderStatus.setStatus(newStatus);
+                orderStatus.setTimestamp(new java.util.Date());
+                orderStatusMapper.update(orderStatus, new QueryWrapper<OrderStatus>().eq("orderid", order.getOrderId()));
+            } else {
+                // 如果订单状态不存在，创建一个新的
+                OrderStatus newOrderStatus = new OrderStatus();
+                newOrderStatus.setOrderId(order.getOrderId());
+                newOrderStatus.setStatus(newStatus);
+                newOrderStatus.setTimestamp(new java.util.Date());
+                newOrderStatus.setLineNumber(1);
+                orderStatusMapper.insert(newOrderStatus);
+            }
+        }
+    }
 }

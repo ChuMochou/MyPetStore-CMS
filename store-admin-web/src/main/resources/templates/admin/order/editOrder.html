@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Order - MyPetStore Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" type="text/css" media="screen"/>
+</head>
+<body>
+
+<header th:replace="~{admin/common/top}"></header>
+
+<div class="admin-container">
+    <h2 class="section-title">
+        Edit Order Information
+        <a th:href="@{/order/orders/details(orderId=${order.orderId})}" class="btn btn-primary">Back to Details</a>
+    </h2>
+
+    <div class="user-details-container">
+        <!-- Display error message if any -->
+        <div th:if="${errorMsg}" class="login-error" th:text="${errorMsg}"></div>
+        
+        <!-- Display success message if any -->
+        <div th:if="${successMsg}" class="login-success" th:text="${successMsg}"></div>
+
+        <form th:action="@{/order/orders/update}" method="post" class="login-form">
+            <input type="hidden" name="orderId" th:value="${order.orderId}"/>
+            
+            <!-- Order Information Section -->
+            <div class="details-section">
+                <h3 class="details-section-title">Order Information</h3>
+                <div class="details-grid">
+                    <div class="form-group">
+                        <label for="userId">User ID</label>
+                        <input type="text" id="userId" name="userId" th:value="${order.userId}" readonly style="background-color: #f5f5f5;"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="courier">Courier</label>
+                        <input type="text" id="courier" name="courier" th:value="${order.courier}" placeholder="Enter courier name"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderStatus">Order Status</label>
+                        <select id="orderStatus" name="orderStatus" class="search-input">
+                            <option value="0" th:selected="${order.orderStatus == 0}">Pending</option>
+                            <option value="1" th:selected="${order.orderStatus == 1}">Approved</option>
+                            <option value="2" th:selected="${order.orderStatus == 2}">Shipped</option>
+                            <option value="3" th:selected="${order.orderStatus == 3}">Delivered</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Billing Information Section -->
+            <div class="details-section">
+                <h3 class="details-section-title">Billing Information</h3>
+                <div class="details-grid">
+                    <div class="form-group">
+                        <label for="billToFirstName">Bill To First Name</label>
+                        <input type="text" id="billToFirstName" name="billToFirstName" th:value="${order.billToFirstName}" placeholder="Enter first name"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billToLastName">Bill To Last Name</label>
+                        <input type="text" id="billToLastName" name="billToLastName" th:value="${order.billToLastName}" placeholder="Enter last name"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billAddress1">Address Line 1</label>
+                        <input type="text" id="billAddress1" name="billAddress1" th:value="${order.billAddress1}" placeholder="Enter address line 1"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billAddress2">Address Line 2</label>
+                        <input type="text" id="billAddress2" name="billAddress2" th:value="${order.billAddress2}" placeholder="Enter address line 2"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billCity">City</label>
+                        <input type="text" id="billCity" name="billCity" th:value="${order.billCity}" placeholder="Enter city"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billState">State/Province</label>
+                        <input type="text" id="billState" name="billState" th:value="${order.billState}" placeholder="Enter state/province"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billZip">ZIP/Postal Code</label>
+                        <input type="text" id="billZip" name="billZip" th:value="${order.billZip}" placeholder="Enter ZIP/postal code"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billCountry">Country</label>
+                        <input type="text" id="billCountry" name="billCountry" th:value="${order.billCountry}" placeholder="Enter country"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="creditCard">Credit Card Number</label>
+                        <input type="text" id="creditCard" name="creditCard" th:value="${order.creditCard}" placeholder="Enter credit card number"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardType">Card Type</label>
+                        <select id="cardType" name="cardType" class="search-input">
+                            <option value="" th:selected="${order.cardType == null or order.cardType == ''}">Select Card Type</option>
+                            <option value="Visa" th:selected="${order.cardType == 'Visa'}">Visa</option>
+                            <option value="MasterCard" th:selected="${order.cardType == 'MasterCard'}">MasterCard</option>
+                            <option value="American Express" th:selected="${order.cardType == 'American Express'}">American Express</option>
+                            <option value="Discover" th:selected="${order.cardType == 'Discover'}">Discover</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date (MM/YYYY)</label>
+                        <input type="text" id="expiryDate" name="expiryDate" th:value="${order.expiryDate}" placeholder="e.g., 12/2025"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Information Section -->
+            <div class="details-section">
+                <h3 class="details-section-title">Shipping Information</h3>
+                <div class="details-grid">
+                    <div class="form-group">
+                        <label for="shipToFirstName">Ship To First Name</label>
+                        <input type="text" id="shipToFirstName" name="shipToFirstName" th:value="${order.shipToFirstName}" placeholder="Enter first name"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shipToLastName">Ship To Last Name</label>
+                        <input type="text" id="shipToLastName" name="shipToLastName" th:value="${order.shipToLastName}" placeholder="Enter last name"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shipAddress1">Address Line 1</label>
+                        <input type="text" id="shipAddress1" name="shipAddress1" th:value="${order.shipAddress1}" placeholder="Enter address line 1"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shipAddress2">Address Line 2</label>
+                        <input type="text" id="shipAddress2" name="shipAddress2" th:value="${order.shipAddress2}" placeholder="Enter address line 2"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shipCity">City</label>
+                        <input type="text" id="shipCity" name="shipCity" th:value="${order.shipCity}" placeholder="Enter city"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shipState">State/Province</label>
+                        <input type="text" id="shipState" name="shipState" th:value="${order.shipState}" placeholder="Enter state/province"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shipZip">ZIP/Postal Code</label>
+                        <input type="text" id="shipZip" name="shipZip" th:value="${order.shipZip}" placeholder="Enter ZIP/postal code"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shipCountry">Country</label>
+                        <input type="text" id="shipCountry" name="shipCountry" th:value="${order.shipCountry}" placeholder="Enter country"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="user-actions">
+                <button type="submit" class="btn btn-success">Update Order Info</button>
+                <a th:href="@{/order/orders/details(orderId=${order.orderId})}" class="btn btn-primary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User - MyPetStore Admin</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" type="text/css" media="screen"/>
+</head>
+<body>
+
+<header th:replace="~{admin/common/top}"></header>
+
+<div class="admin-container">
+    <h2 class="section-title">
+        Edit User Information
+        <a th:href="@{/user/userDetails(username=${account.username})}" class="btn btn-primary">Back to Details</a>
+    </h2>
+
+    <div class="user-details-container">
+        <!-- Display error message if any -->
+        <div th:if="${errorMsg}" class="login-error" th:text="${errorMsg}"></div>
+        
+        <!-- Display success message if any -->
+        <div th:if="${successMsg}" class="login-success" th:text="${successMsg}"></div>
+
+        <form th:action="@{/user/users/update}" method="post" class="login-form">
+            <input type="hidden" name="username" th:value="${account.username}"/>
+            
+            <!-- Basic Information Section -->
+            <div class="details-section">
+                <h3 class="details-section-title">Basic Information</h3>
+                <div class="details-grid">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" th:value="${account.firstName}" placeholder="Enter first name"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" th:value="${account.lastName}" placeholder="Enter last name"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" th:value="${account.email}" placeholder="Enter email address"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" th:value="${account.phone}" placeholder="Enter phone number"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" name="status" class="search-input">
+                            <option value="OK" th:selected="${account.status == 'OK'}">OK</option>
+                            <option value="PENDING" th:selected="${account.status == 'PENDING'}">PENDING</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Section -->
+            <div class="details-section">
+                <h3 class="details-section-title">Address Information</h3>
+                <div class="details-grid">
+                    <div class="form-group">
+                        <label for="address1">Address Line 1</label>
+                        <input type="text" id="address1" name="address1" th:value="${account.address1}" placeholder="Enter address line 1"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address2">Address Line 2</label>
+                        <input type="text" id="address2" name="address2" th:value="${account.address2}" placeholder="Enter address line 2"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" th:value="${account.city}" placeholder="Enter city"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">State/Province</label>
+                        <input type="text" id="state" name="state" th:value="${account.state}" placeholder="Enter state/province"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zip">ZIP/Postal Code</label>
+                        <input type="text" id="zip" name="zip" th:value="${account.zip}" placeholder="Enter ZIP/postal code"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input type="text" id="country" name="country" th:value="${account.country}" placeholder="Enter country"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preferences Section -->
+            <div class="details-section">
+                <h3 class="details-section-title">Preferences</h3>
+                <div class="details-grid">
+                    <div class="form-group">
+                        <label for="languagePrefer">Language Preference</label>
+                        <select id="languagePrefer" name="languagePrefer" class="search-input">
+                            <option value="Chinese" th:selected="${account.languagePrefer == 'Chinese'}">Chinese</option>
+                            <option value="English" th:selected="${account.languagePrefer == 'English'}">English</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="favoriteCategory">Favorite Category</label>
+                        <select id="favoriteCategory" name="favoriteCategory" class="search-input">
+                            <option value="CATS" th:selected="${account.favoriteCategory == 'CATS'}">Cats</option>
+                            <option value="DOGS" th:selected="${account.favoriteCategory == 'DOGS'}">Dogs</option>
+                            <option value="BIRDS" th:selected="${account.favoriteCategory == 'BIRDS'}">Birds</option>
+                            <option value="FISH" th:selected="${account.favoriteCategory == 'FISH'}">Fish</option>
+                            <option value="REPTILES" th:selected="${account.favoriteCategory == 'REPTILES'}">Reptiles</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="myListOption">My List Option</label>
+                        <select id="myListOption" name="myListOption" class="search-input">
+                            <option value="1" th:selected="${account.myListOption == 1}">Enabled</option>
+                            <option value="0" th:selected="${account.myListOption == 0}">Disabled</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bannerOption">Banner Option</label>
+                        <select id="bannerOption" name="bannerOption" class="search-input">
+                            <option value="1" th:selected="${account.bannerOption == 1}">Enabled</option>
+                            <option value="0" th:selected="${account.bannerOption == 0}">Disabled</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="user-actions">
+                <button type="submit" class="btn btn-success">Update User Info</button>
+                <a th:href="@{/user/userDetails(username=${account.username})}" class="btn btn-primary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

@@ -142,6 +142,7 @@
 
         <!-- Action Buttons -->
         <div class="user-actions">
+            <a th:href="@{/user/users/edit(username=${account.username})}" class="btn btn-warning">Edit User Info</a>
             <a th:href="@{/order/orders(userId=${account.username})}" class="btn btn-primary">View User Orders</a>
             <form th:action="@{/user/users/resetPassword}" method="post" style="display: inline;"
                   onsubmit="return confirm('Are you sure you want to reset this user\'s password to 123456?')">

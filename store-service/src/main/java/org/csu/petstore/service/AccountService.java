@@ -23,4 +23,6 @@ public interface AccountService {
     Account getAccount(String username);
 
     void resetPassword(String username, String newPassword);
+
+    void updateAccount(Account account);
 }

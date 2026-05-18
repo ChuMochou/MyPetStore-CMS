@@ -31,4 +31,6 @@ public interface OrderService {
     void shipOrder(int orderId);
 
     List<Orders> searchOrders(String keyword);
+
+    void updateOrder(Orders order, int newStatus);
 }

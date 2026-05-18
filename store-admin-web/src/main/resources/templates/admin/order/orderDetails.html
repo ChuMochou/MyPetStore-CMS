@@ -197,6 +197,19 @@
                 <p>No items found in this order.</p>
             </div>
         </div>
+
+        <!-- Action Buttons -->
+        <div class="user-actions">
+            <a th:href="@{/order/orders/edit(orderId=${order.orderId})}" class="btn btn-warning">Edit Order Info</a>
+            <form th:action="@{/order/orders/delete}" method="post" style="display: inline;"
+                  onsubmit="return confirm('Are you sure you want to delete this order?')">
+                <input type="hidden" name="orderId" th:value="${order.orderId}"/>
+                <button type="submit" class="btn btn-danger">Delete Order</button>
+            </form>
+            <a th:href="@{/order/orders(userId=${filterUserId})}" class="btn btn-primary">
+                <span th:text="${filterUserId != null ? 'Back to User Orders' : 'Back to Orders'}"></span>
+            </a>
+        </div>
     </div>
 </div>
 
